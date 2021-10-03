@@ -1,0 +1,12 @@
+version: "3.5"
+services:
+  app:
+    build: .
+    environment:
+      TERM: xterm
+    ports:
+      - "8000:8000"
+    volumes:
+      - ..:/home/geekEditor
+    container_name: geekEditor
+
