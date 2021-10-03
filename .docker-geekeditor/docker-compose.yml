@@ -10,3 +10,11 @@ services:
       - ..:/home/geekEditor
     container_name: geekEditor
 
+  mongo:
+    image: mongo:4.4-focal
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: geekuser
+      MONGO_INITDB_ROOT_PASSWORD: geekpass
+    ports:
+      - "27017:27017"
+    container_name: database

@@ -1,3 +1,3 @@
 module.exports = {
-    MongoURI: 'mongodb://localhost:27017/codeDB'
+    MongoURI: 'mongodb://mongo:27017/codeDB'
 }
