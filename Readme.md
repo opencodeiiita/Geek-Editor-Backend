@@ -12,6 +12,14 @@ This repo is the backend of the geek editor project. It provides various APIs to
 
 # Getting Started
 
+## Docker Usage
+
+```bash
+cd .docker_geekeditor/
+docker-compose up -d
+docker exec -it docker_geekeditor_app /bin/bash
+```
+
 ## Set up in Your local system
 
 1. You must have git, nodejs and mongoDB installed in your local system.
