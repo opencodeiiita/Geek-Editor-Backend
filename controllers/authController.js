@@ -82,6 +82,22 @@ exports.updateUser = async (req, res, next) => {
 
 exports.addProfile = async (req, res, next) => {
   try {
+    
+    const user_with_username = await User.find({username: req.body.username});
+    
+    if(user_with_username.length){
+      return res.status(501).json({
+        sucess:false,
+        error: "A user with given username exists"
+      })
+    }
+    const user_with_email = await User.find({email: req.body.email}) 
+    if(user_with_email.length){
+      return res.status(501).json({
+        sucess:false,
+        error: "A user with given email exists"
+      })
+    }
     const saltHash = genPassword(req.body.password);
     const salt = saltHash.salt;
     const hash = saltHash.hash;
