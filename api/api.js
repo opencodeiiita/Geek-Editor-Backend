@@ -6,6 +6,7 @@ const {
   getProfile,
   addProfile,
   login,
+  updateUser
 } = require("../controllers/authController");
 
 /**
@@ -26,5 +27,6 @@ router.route("/profile/:username").get(getProfile);
 router.post("/login/", passport.authenticate("local"), login);
 
 router.route("/register/").post(addProfile);
+router.post("/update/:id",updateUser);
 
 module.exports = router;
