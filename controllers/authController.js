@@ -56,29 +56,29 @@ exports.getProfile = async (req, res, next) => {
 //     }
 // }
 
-// exports.updateUser = async (req, res, next) => {
-//     try {
-//         const User = await User.findById(req.params.id).exec();
-//         if (!User) {
-//             return res.status(404).json( {
-//                 success: false,
-//                 error: 'User Not Found'
-//             })
-//         }
-//         console.log(req.body)
-//         User.set(req.body);
-//         var update = await User.save();
-//         return res.status(200).json({
-//             success: true,
-//             data: update
-//         })
-//     } catch (error) {
-//         return res.status(500).json({
-//             success: false,
-//             error: `Error Getting User ${req.params.id}: ${error.message}`
-//         })
-//     }
-// }
+exports.updateUser = async (req, res, next) => {
+ 
+  try {
+        const user = await User.findById(req.params.id).exec();
+        if (!user) {
+            return res.status(404).json( {
+                success: false,
+                error: 'User Not Found'
+            })
+        }
+        user.set(req.body);
+        var update = await user.save();
+        return res.status(200).json({
+            success: true,
+            data: update
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: `Error Getting User ${req.params.id}: ${error.message}`
+        })
+    }
+}
 
 exports.addProfile = async (req, res, next) => {
   try {
