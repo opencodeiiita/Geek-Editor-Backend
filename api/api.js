@@ -28,5 +28,5 @@ router.post("/login/", passport.authenticate("local"), login);
 
 router.route("/register/").post(addProfile);
 router.post("/update/:id",updateUser);
-
+router.route("/profile/:id").delete(deleteUser);
 module.exports = router;

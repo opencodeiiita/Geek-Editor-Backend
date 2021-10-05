@@ -117,26 +117,27 @@ exports.login = async (req, res, next) => {
   });
 };
 
-// exports.deleteUser = async (req, res, next) => {
-//     try {
-//         const User = await User.findById(req.params.id);
-//         if (!User) {
-//             return res.status(404).json( {
-//                 success: false,
-//                 error: 'User Not Found'
-//             })
-//         }
+//Deleting the user
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      })
+    }
 
-//         await   User.remove();
+    await user.remove();
 
-//         return res.status(200).json({
-//             success: true,
-//             data: {}
-//         })
-//     } catch (error) {
-//         return res.status(500).json({
-//             success: false,
-//             error: `Error Deleting User: ${error.message}`
-//         })
-//     }
-// }
+    return res.status(200).json({
+      success: true,
+      data: {}
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Deleting User: ${error.message}`,
+    })
+  }
+}
