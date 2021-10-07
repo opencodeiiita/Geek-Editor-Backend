@@ -6,7 +6,8 @@ const {
   getProfile,
   addProfile,
   login,
-  updateUser
+  updateUser,
+  deleteUser
 } = require("../controllers/authController");
 
 /**
