@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const genPassword = require("../utils/passwordUtils").genPassword;
+const validator = require('validator')
 
 exports.getProfile = async (req, res, next) => {
   try {
@@ -86,6 +87,10 @@ exports.addProfile = async (req, res, next) => {
     const salt = saltHash.salt;
     const hash = saltHash.hash;
 
+    if(!validator.isEmail(req.body.email)) {
+      throw new Error ("Email is invalid")
+    }
+
     const newUser = new User({
       username: req.body.username,
       hash: hash,
@@ -103,9 +108,9 @@ exports.addProfile = async (req, res, next) => {
     });
   } catch (err) {
     console.log("Error occured while registering", err);
-    return res.status(500).json({
+    return res.status(400).json({
       success: false,
-      error: `Error Adding User: ${error.message}`,
+      error: `Error Adding User: ${err.message}`,
     });
   }
 };
