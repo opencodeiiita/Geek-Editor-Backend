@@ -7,7 +7,8 @@ const {
   addProfile,
   login,
   updateUser,
-  deleteUser
+  deleteUser,
+  getUserById
 } = require("../controllers/authController");
 
 /**
@@ -30,5 +31,6 @@ router.post("/login/", passport.authenticate("local"), login);
 router.route("/register/").post(addProfile);
 router.post("/update/:id",updateUser);
 router.route("/profile/:id").delete(deleteUser);
+router.get("/profile/:id",getUserById);
 
 module.exports = router;
