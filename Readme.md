@@ -42,7 +42,8 @@ This repo is the backend of the geek editor project. It provides various APIs to
 | email    | String    | true     |
 | hash     | String    | true     |
 | salt     | String    | true     |
-| Codes    | Array     | false    |
+| codes    | Array     | false    |
+| year     | Date      | false    |
 
 ### Code Schema
 
@@ -50,6 +51,8 @@ This repo is the backend of the geek editor project. It provides various APIs to
 | ------ | --------- | -------- |
 | userID | string    | true     |
 | code   | string    | true     |
+| language | string    | true     |
+| languageCode | string    | true     |
 
 ## APIs
 

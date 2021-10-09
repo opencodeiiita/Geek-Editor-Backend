@@ -1,5 +1,6 @@
 const User = require("../models/user");
 const genPassword = require("../utils/passwordUtils").genPassword;
+const validator = require('validator')
 
 exports.getProfile = async (req, res, next) => {
   try {
@@ -35,26 +36,26 @@ exports.getProfile = async (req, res, next) => {
 //     }
 // }
 
-// exports.getUserById = async (req, res, next) => {
-//     try {
-//         const User = await User.findById(req.params.id);
-//         if (!User) {
-//             return res.status(404).json( {
-//                 success: false,
-//                 error: 'User Not Found'
-//             })
-//         }
-//         return res.status(200).json({
-//             success: true,
-//             data: User
-//         })
-//     } catch (error) {
-//         return res.status(500).json({
-//             success: false,
-//             error: `Error Getting User ${req.params.id}: ${error.message}`
-//         })
-//     }
-// }
+exports.getUserById = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json( {
+                success: false,
+                error: 'User Not Found'
+            })
+        }
+        return res.status(200).json({
+            success: true,
+            data: user
+        })
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            error: `Error Getting User ${req.params.id}: ${error.message}`
+        })
+    }
+}
 
 exports.updateUser = async (req, res, next) => {
  
@@ -86,6 +87,10 @@ exports.addProfile = async (req, res, next) => {
     const salt = saltHash.salt;
     const hash = saltHash.hash;
 
+    if(!validator.isEmail(req.body.email)) {
+      throw new Error ("Email is invalid")
+    }
+
     const newUser = new User({
       username: req.body.username,
       hash: hash,
@@ -103,9 +108,9 @@ exports.addProfile = async (req, res, next) => {
     });
   } catch (err) {
     console.log("Error occured while registering", err);
-    return res.status(500).json({
+    return res.status(400).json({
       success: false,
-      error: `Error Adding User: ${error.message}`,
+      error: `Error Adding User: ${err.message}`,
     });
   }
 };
@@ -117,26 +122,27 @@ exports.login = async (req, res, next) => {
   });
 };
 
-// exports.deleteUser = async (req, res, next) => {
-//     try {
-//         const User = await User.findById(req.params.id);
-//         if (!User) {
-//             return res.status(404).json( {
-//                 success: false,
-//                 error: 'User Not Found'
-//             })
-//         }
+//Deleting a user
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      })
+    }
 
-//         await   User.remove();
+    await user.remove();
 
-//         return res.status(200).json({
-//             success: true,
-//             data: {}
-//         })
-//     } catch (error) {
-//         return res.status(500).json({
-//             success: false,
-//             error: `Error Deleting User: ${error.message}`
-//         })
-//     }
-// }
+    return res.status(200).json({
+      success: true,
+      data: {}
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Deleting User: ${error.message}`,
+    })
+  }
+}
