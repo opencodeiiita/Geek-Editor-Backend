@@ -56,6 +56,7 @@ app.use(passport.session());
 
 // Routes
 app.use("/", require("./api/api.js"));
+app.use("/code", require("./api/codeapi.js"));
 
 const PORT = process.env.PORT || 8000;
 

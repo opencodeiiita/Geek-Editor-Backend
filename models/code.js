@@ -12,4 +12,4 @@ const CodeSchema = new mongoose.Schema({
 
 const Code = mongoose.model("Code", CodeSchema);
 
-module.exports = User;
+module.exports = Code;
