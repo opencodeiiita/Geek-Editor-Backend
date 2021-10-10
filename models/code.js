@@ -2,8 +2,9 @@ const mongoose = require("mongoose");
 
 const CodeSchema = new mongoose.Schema({
   userId: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
     required: true,
+    ref: 'User',
   },
   code: {
     type: String,
