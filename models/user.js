@@ -28,7 +28,11 @@ const UserSchema = new mongoose.Schema({
     required: true
   },
   codes:{
-      type:Array,
+      type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Code',
+            required:true,
+        }],
       default:[]
   },
   year: {

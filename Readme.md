@@ -42,7 +42,7 @@ This repo is the backend of the geek editor project. It provides various APIs to
 | email    | String    | true     |
 | hash     | String    | true     |
 | salt     | String    | true     |
-| codes    | Array     | false    |
+| codes    | [ ObjectId ]     | false    |
 | year     | Date      | false    |
 | followers    | [ObjectId ]     | false    |
 | following    | [ObjectId ]     | false    |
@@ -51,7 +51,7 @@ This repo is the backend of the geek editor project. It provides various APIs to
 
 | Field  | Data Type | Required |
 | ------ | --------- | -------- |
-| userID | string    | true     |
+| userID | ObjectId     | true     |
 | code   | string    | true     |
 | language | string    | true     |
 | languageCode | string    | true     |
