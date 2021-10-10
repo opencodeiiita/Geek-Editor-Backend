@@ -37,7 +37,23 @@ const UserSchema = new mongoose.Schema({
   },
   year: {
       type: Date
-  }
+  },
+  followers: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    }],
+    default: []
+  },
+  following: {
+    type: [{
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User'
+    }],
+    default: []
+  },
 },{ timestamps: true });
 
 

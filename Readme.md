@@ -44,6 +44,8 @@ This repo is the backend of the geek editor project. It provides various APIs to
 | salt     | String    | true     |
 | codes    | [ ObjectId ]     | false    |
 | year     | Date      | false    |
+| followers    | [ObjectId ]     | false    |
+| following    | [ObjectId ]     | false    |
 
 ### Code Schema
 
