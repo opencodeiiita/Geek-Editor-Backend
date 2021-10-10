@@ -5,3 +5,4 @@ const codeController = require('../controllers/codeController');
 
 
 router.get('/:codeId',codeController.getCode);
+module.exports=router;

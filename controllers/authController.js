@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const genPassword = require("../utils/passwordUtils").genPassword;
-const validator = require('validator')
+const validator = require('validator');
+const { ObjectId } = require('mongodb');
 
 exports.getProfile = async (req, res, next) => {
   try {
@@ -37,49 +38,49 @@ exports.getProfile = async (req, res, next) => {
 // }
 
 exports.getUserById = async (req, res, next) => {
-    try {
-        const user = await User.findById(req.params.id);
-        if (!user) {
-            return res.status(404).json( {
-                success: false,
-                error: 'User Not Found'
-            })
-        }
-        return res.status(200).json({
-            success: true,
-            data: user
-        })
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            error: `Error Getting User ${req.params.id}: ${error.message}`
-        })
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
     }
-}
+    return res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Getting User ${req.params.id}: ${error.message}`
+    });
+  }
+};
 
 exports.updateUser = async (req, res, next) => {
- 
+
   try {
-        const user = await User.findById(req.params.id).exec();
-        if (!user) {
-            return res.status(404).json( {
-                success: false,
-                error: 'User Not Found'
-            })
-        }
-        user.set(req.body);
-        var update = await user.save();
-        return res.status(200).json({
-            success: true,
-            data: update
-        })
-    } catch (error) {
-        return res.status(500).json({
-            success: false,
-            error: `Error Getting User ${req.params.id}: ${error.message}`
-        })
+    const user = await User.findById(req.params.id).exec();
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
     }
-}
+    user.set(req.body);
+    var update = await user.save();
+    return res.status(200).json({
+      success: true,
+      data: update
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Getting User ${req.params.id}: ${error.message}`
+    });
+  }
+};
 
 exports.addProfile = async (req, res, next) => {
   try {
@@ -87,8 +88,8 @@ exports.addProfile = async (req, res, next) => {
     const salt = saltHash.salt;
     const hash = saltHash.hash;
 
-    if(!validator.isEmail(req.body.email)) {
-      throw new Error ("Email is invalid")
+    if (!validator.isEmail(req.body.email)) {
+      throw new Error("Email is invalid");
     }
 
     const newUser = new User({
@@ -130,7 +131,7 @@ exports.deleteUser = async (req, res, next) => {
       return res.status(404).json({
         success: false,
         error: 'User Not Found'
-      })
+      });
     }
 
     await user.remove();
@@ -143,6 +144,30 @@ exports.deleteUser = async (req, res, next) => {
     return res.status(500).json({
       success: false,
       error: `Error Deleting User: ${error.message}`,
-    })
+    });
   }
-}
+};
+exports.followUser = async (req, res, next) => {
+  const _id = req.params.id;
+  try {
+    if (!_id.match(/^[0-9a-fA-F]{24}$/)) {
+      return res.status(404).json({ success: false, error: `Invalid User Id provided` });
+    }
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
+    }
+    const updatedUser1Res = await User.updateOne({ _id: ObjectId(req.user._id) }, { $addToSet: { following: [ObjectId(_id)] } });
+    const updatedUser2Res = await User.updateOne({ _id: ObjectId(_id) }, { $addToSet: { followers: [ObjectId(req.user._id)] } });
+    res.status(200).json({ success: true, mesg: 'User followed' });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      error: `Error Following User: ${error.message}`,
+    });
+  }
+};
