@@ -1,5 +1,4 @@
 const express = require("express");
-// const expressLayouts = require('express-ejs-layouts');
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
@@ -7,23 +6,20 @@ const path = require("path");
 
 const app = express();
 
-//Set Up the Assets Folder
+
+// SET UP THE ASSETS FOLDER
 app.use(express.static(path.join(__dirname, "public")));
 
-//require passport
 
+// REQUIRE PASSPORT
 require("./config/passport");
 
-// Passport Config
-// require('./config/passport')(passport);
 
-// DB Config
+// DB CONFIG
 const db = require("./config/keys").MongoURI;
 
-// Db Connection from .env file
-// const db = process.env.MONGO_URI;
 
-// Connect to MongoDB
+// CONNECT TO MongoDB
 if (db) {
   mongoose
     .connect(db, { useNewUrlParser: true })
@@ -31,33 +27,33 @@ if (db) {
     .catch((err) => console.log(err));
 }
 
-// Express body parser
+
+// EXPRESS BODY PARSER
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// Express session
+
+// EXPRESS SESSION
 app.use(
   session({
     secret: "secret",
     resave: true,
     saveUninitialized: true,
-    // store: MongoStore.create({
-    //   mongoUrl: db,
-    // }),
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
     },
   })
 );
 
-// Passport middleware
+
+// PASSPORT MIDDLEWARE
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Routes
+
+// ROUTES
 app.use("/", require("./api/api.js"));
 app.use("/code", require("./api/codeapi.js"));
 
 const PORT = process.env.PORT || 8000;
-
 app.listen(PORT, console.log(`Server started on port ${PORT}`));
