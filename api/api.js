@@ -9,7 +9,8 @@ const {
   updateUser,
   deleteUser,
   getUserById,
-  followUser
+  followUser,
+  verifyUser
 } = require("../controllers/authController");
 
 /**
@@ -27,11 +28,10 @@ router.route("/profile/:username").get(getProfile);
 //     .route('/register')
 //     .post
 
-router.post("/login/", passport.authenticate("local"), login);
-
+router.post("/login/", login);
 router.route("/register/").post(addProfile);
-router.post("/update/:id",updateUser);
-router.route("/profile/:id").delete(deleteUser);
-router.get("/profile/:id",getUserById);
-router.put('/follow/:id', followUser);
+router.post("/update/:id",verifyUser,updateUser);
+router.delete("/profile/:id",verifyUser, deleteUser);
+router.get("/profile/:id",verifyUser,getUserById);
+router.put('/follow/:id',verifyUser, followUser);
 module.exports = router;

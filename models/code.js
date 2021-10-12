@@ -17,7 +17,7 @@ const CodeSchema = new mongoose.Schema({
   languageCode: {
     type: String,
     required: true,
-  },
+  }
 
 }, { timestamps: true });
 
