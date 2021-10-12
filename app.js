@@ -45,6 +45,9 @@ app.use(
     secret: "secret",
     resave: true,
     saveUninitialized: true,
+    // store: MongoStore.create({
+    //   mongoUrl: db,
+    // }),
     cookie: {
       maxAge: 1000 * 60 * 60 * 24,
     },
