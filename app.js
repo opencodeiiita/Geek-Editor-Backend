@@ -1,4 +1,5 @@
 const express = require("express");
+// const expressLayouts = require('express-ejs-layouts');
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
@@ -16,6 +17,12 @@ require("./config/passport");
 
 // DB CONFIG
 const db = require("./config/keys").MongoURI;
+
+
+/*
+DB CONNECTION FROM .env FILE
+const db = process.env.MONGO_URI;
+*/
 
 
 // CONNECT TO MongoDB
