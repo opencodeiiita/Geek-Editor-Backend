@@ -4,6 +4,8 @@ const validator = require('validator');
 const { ObjectId } = require('mongodb');
 const jwt = require("jsonwebtoken");
 const validPassword = require("../utils/passwordUtils").validPassword;
+const {sendEmail} = require("./emailController")
+const {secureId} = require('../utils/emailUtils')
 
 exports.verifyUser = async(req,res,next) => {
   const token = req.headers["x-access-token"];
@@ -66,6 +68,7 @@ exports.addProfile = async (req, res, next) => {
     const saltHash = genPassword(req.body.password);
     const salt = saltHash.salt;
     const hash = saltHash.hash;
+    const secureToken = secureId();
 
     if (!validator.isEmail(req.body.email)) {
       throw new Error("Email is invalid");
@@ -85,15 +88,22 @@ exports.addProfile = async (req, res, next) => {
       lname: req.body.lname,
       email: req.body.email,
       token: token,
+      verificationToken: secureToken
     });
 
-
+    const link = `http://localhost:8000/verifyEmail/${username}/${secureToken}`
+    
     /* -------Save Profile------- */
+    // DO NOT DELETE IT
+    // TO BE USED AFTER DEVOLOPMENT
+    //sendEmail(link,email,username)
+    
     await newUser.save();
 
     return res.status(201).json({
       success: true,
       data: newUser,
+      message: 'Verify the email via link to activate your account'
     });
   } catch (err) {
     console.log("Error occured while registering", err);
@@ -117,6 +127,16 @@ exports.login = async (req, res, next) => {
           error: "All input is required"});
       }
       const user = await User.findOne({email: email});
+    // DO NOT DELETE IT
+    // TO BE USED AFTER DEVOLOPMENT
+    // if(req.originalUrl !== '/devoloperLogin/'){
+    //   if(!(user.verified)){
+    //     return res.json({
+    //       success: false,
+    //       error: "Verify your email first"
+    //     })
+    //   }
+    // }
   
       if (user && (await validPassword(password,user.hash, user.salt))) {
         const token = jwt.sign(
