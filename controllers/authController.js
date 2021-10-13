@@ -32,10 +32,11 @@ exports.verifyUser = async(req,res,next) => {
     next();
 }
 
+
+// -------GET PROFILE-------
 exports.getProfile = async (req, res, next) => {
   try {
     const user = await User.find({ username: req.params.username });
-
     return res.status(200).json({
       success: true,
       data: user,
@@ -48,69 +49,8 @@ exports.getProfile = async (req, res, next) => {
   }
 };
 
-// ISSUE: get Code ID from usaved user.
 
-// exports.getCode = async (req, res, next) => {
-//     try {
-//         const code = await Code.find({userID:req.params.username});
-
-//         return res.status(200).json({
-//             success: true,
-//             data: user
-//         })
-//     } catch (error) {
-//         return res.status(500).json({
-//             success: false,
-//             error: `Error Getting Users: ${error.message}`
-//         })
-//     }
-// }
-
-exports.getUserById = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        error: 'User Not Found'
-      });
-    }
-    return res.status(200).json({
-      success: true,
-      data: user
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      error: `Error Getting User ${req.params.id}: ${error.message}`
-    });
-  }
-};
-
-exports.updateUser = async (req, res, next) => {
-
-  try {
-    const user = await User.findById(req.params.id).exec();
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        error: 'User Not Found'
-      });
-    }
-    user.set(req.body);
-    var update = await user.save();
-    return res.status(200).json({
-      success: true,
-      data: update
-    });
-  } catch (error) {
-    return res.status(500).json({
-      success: false,
-      error: `Error Getting User ${req.params.id}: ${error.message}`
-    });
-  }
-};
-
+// -------ADD PROFILE-------
 exports.addProfile = async (req, res, next) => {
   try {
     
@@ -146,7 +86,11 @@ exports.addProfile = async (req, res, next) => {
       email: req.body.email,
       token: token,
     });
+
+
+    /* -------Save Profile------- */
     await newUser.save();
+
     return res.status(201).json({
       success: true,
       data: newUser,
@@ -160,6 +104,8 @@ exports.addProfile = async (req, res, next) => {
   }
 };
 
+
+// -------LOGIN-------
 exports.login = async (req, res, next) => {
 
     try {
@@ -198,7 +144,34 @@ exports.login = async (req, res, next) => {
   }
 };
 
-//Deleting a user
+
+// -------UPDATE USER-------
+exports.updateUser = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id).exec();
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
+    }
+
+    user.set(req.body);
+    var update = await user.save();
+    return res.status(200).json({
+      success: true,
+      data: update
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Getting User ${req.params.id}: ${error.message}`
+    });
+  }
+};
+
+
+//-------DELETE USER-------
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
@@ -222,6 +195,33 @@ exports.deleteUser = async (req, res, next) => {
     });
   }
 };
+
+
+// -------GET USER BY ID-------
+exports.getUserById = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
+    }
+    
+    return res.status(200).json({
+      success: true,
+      data: user
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Getting User ${req.params.id}: ${error.message}`
+    });
+  }
+};
+
+
+//-------FOLLOW USER-------
 exports.followUser = async (req, res, next) => {
   const _id = req.params.id;
   try {
@@ -235,6 +235,7 @@ exports.followUser = async (req, res, next) => {
         error: 'User Not Found'
       });
     }
+
     const updatedUser1Res = await User.updateOne({ _id: ObjectId(req.user._id) }, { $addToSet: { following: [ObjectId(_id)] } });
     const updatedUser2Res = await User.updateOne({ _id: ObjectId(_id) }, { $addToSet: { followers: [ObjectId(req.user._id)] } });
     res.status(200).json({ success: true, mesg: 'User followed' });
