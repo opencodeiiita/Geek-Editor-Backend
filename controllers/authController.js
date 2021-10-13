@@ -2,6 +2,35 @@ const User = require("../models/user");
 const genPassword = require("../utils/passwordUtils").genPassword;
 const validator = require('validator');
 const { ObjectId } = require('mongodb');
+const jwt = require("jsonwebtoken");
+const validPassword = require("../utils/passwordUtils").validPassword;
+
+exports.verifyUser = async(req,res,next) => {
+  const token = req.headers["x-access-token"];
+  if(!token){
+    return res.status(403).json({
+      success: false,
+      error: "Token is required"
+    })
+  }
+  const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
+    }
+    try {
+      const decoded = jwt.verify(token, "secret_key");
+      req.user = decoded;
+    } catch (err) {
+      return res.status(404).json({
+        success: false,
+        error: 'Wrong token'
+      });
+    }
+    next();
+}
 
 
 // -------GET PROFILE-------
@@ -24,6 +53,16 @@ exports.getProfile = async (req, res, next) => {
 // -------ADD PROFILE-------
 exports.addProfile = async (req, res, next) => {
   try {
+    
+    const {email,password,fname,lname,username} = req.body
+
+    if (!(email && password && fname && lname && username)) {
+      return res.status(400).json({
+        success: false,
+        error: "All input is required"
+      });
+    }
+
     const saltHash = genPassword(req.body.password);
     const salt = saltHash.salt;
     const hash = saltHash.hash;
@@ -31,7 +70,13 @@ exports.addProfile = async (req, res, next) => {
     if (!validator.isEmail(req.body.email)) {
       throw new Error("Email is invalid");
     }
-
+    const token = jwt.sign(
+      { username: req.body.username, email:req.body.email },
+       'secret_key',
+      {
+        expiresIn: "2h",
+      }
+    );
     const newUser = new User({
       username: req.body.username,
       hash: hash,
@@ -39,7 +84,9 @@ exports.addProfile = async (req, res, next) => {
       fname: req.body.fname,
       lname: req.body.lname,
       email: req.body.email,
+      token: token,
     });
+
 
     /* -------Save Profile------- */
     await newUser.save();
@@ -60,10 +107,41 @@ exports.addProfile = async (req, res, next) => {
 
 // -------LOGIN-------
 exports.login = async (req, res, next) => {
-  return res.status(200).json({
-    success: true,
-    data: req.user,
-  });
+
+    try {
+      const { email, password } = req.body;
+      
+      if (!(email && password)) {
+        res.status(400).json({
+          success: false,
+          error: "All input is required"});
+      }
+      const user = await User.findOne({email: email});
+  
+      if (user && (await validPassword(password,user.hash, user.salt))) {
+        const token = jwt.sign(
+          { user_id: user._id, email },
+          "secret_key",
+          {
+            expiresIn: "2h",
+          }
+        );
+          user.token = token;
+  
+        return res.status(200).json({
+          success: true,
+          data:user });
+      }
+      return res.status(400).json({
+        success: false,
+        error: `Invalid credentials`,
+      });
+    } catch (err) {
+        return res.status(500).json({
+        success: false,
+        error: `Error loging in : ${err.message}`,
+      });    
+  }
 };
 
 

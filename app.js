@@ -56,8 +56,8 @@ app.use(
 
 
 // PASSPORT MIDDLEWARE
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(passport.initialize());
+// app.use(passport.session());
 
 
 // ROUTES
