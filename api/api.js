@@ -21,6 +21,7 @@ router.route("/profile/:username").get(getProfile);
 
 
 router.post("/login/", login);
+router.post("/devoloperLogin/", login);
 router.route("/register/").post(addProfile);
 router.post("/update/:id",verifyUser,updateUser);
 router.delete("/profile/:id",verifyUser, deleteUser);

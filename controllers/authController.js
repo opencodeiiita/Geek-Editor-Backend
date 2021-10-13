@@ -123,12 +123,14 @@ exports.login = async (req, res, next) => {
           error: "All input is required"});
       }
       const user = await User.findOne({email: email});
+    if(req.originalUrl !== '/devoloperLogin/'){
       if(!(user.verified)){
         return res.json({
           success: false,
           error: "Verify your email first"
         })
       }
+    }
   
       if (user && (await validPassword(password,user.hash, user.salt))) {
         const token = jwt.sign(
