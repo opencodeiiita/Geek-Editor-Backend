@@ -6,7 +6,7 @@ mail = Mailer(email='tdevolopment@gmail.com',
               password='tdevolopment@69')
 
 mail.send(receiver=f'{sys.argv[2]}', 
-          subject='Verification of email',
-          message=f'Click this link {sys.argv[1]} to verify your email :)')
+          subject=f'{sys.argv[4]}',
+          message=f'Click this link {sys.argv[1]} to {sys.argv[4]}')
 
 print(2)

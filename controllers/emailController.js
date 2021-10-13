@@ -2,8 +2,8 @@ const {PythonShell} = require('python-shell');
 const {secureId} = require('../utils/emailUtils')
 const User = require("../models/user");
 
-exports.sendEmail = (link,email,username) => {
-    PythonShell.run('./python/main.py', {args: [link,email,username] }, function (err) {
+exports.sendEmail = (link,email,username,message) => {
+    PythonShell.run('./python/main.py', {args: [link,email,username,message] }, function (err) {
     if (err) {console.log(err)}
     console.log('finished');
     });
@@ -41,4 +41,24 @@ exports.verifyEmail = async(req,res) => {
         });
       }
 
+}
+
+exports.verifyPassword = async(req,res) => {
+    try{
+        const id = req.params.hashid
+        const user = await User.findOne({'resetToken': req.params.hashid})
+        if(!user || user.resetToken !== id){
+            return res.status(400).json({
+                success : false,
+                error: 'Invalid user'
+            })
+        }
+        return res.redirect(`/reset/${id}`)
+    }
+    catch(err){
+        return res.status(400).json({
+            success: true,
+            message: `some error occured ${err}`
+        }) 
+    }
 }

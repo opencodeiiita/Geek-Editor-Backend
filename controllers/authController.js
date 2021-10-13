@@ -96,7 +96,7 @@ exports.addProfile = async (req, res, next) => {
     /* -------Save Profile------- */
     // DO NOT DELETE IT
     // TO BE USED AFTER DEVOLOPMENT
-    //sendEmail(link,email,username)
+    //sendEmail(link,email,username,'Verify email')
     
     await newUser.save();
 
@@ -267,3 +267,69 @@ exports.followUser = async (req, res, next) => {
     });
   }
 };
+
+exports.forgotPassword = async(req,res) => {
+  try{
+    const {username} = req.body
+    const user = await User.findOne({'username': username})
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid user'
+      })
+    }
+    const hashid = secureId()
+    user.resetToken  = hashid
+    await user.save();
+    const link =`http://localhost:8000/reset/${hashid}`
+    sendEmail(link,user.email,username,'Password reset')
+    return res.status(200).json({
+      sucess: true,
+    })
+  }
+  catch(err){
+    return res.status(400).json({
+      success: false,
+      error: `some error occured ${err}`
+    })
+
+  }
+  
+}
+
+exports.resetPassword = async(req,res) => {
+  try{
+    const {password} = req.body
+    const user = await User.findOne({'resetToken': req.params.hashid})
+    if(!user){
+      return res.status(400).json({
+        success: false,
+        error: 'Invalid user'
+      })
+    }
+    if(!password){
+      return res.status(400).json({
+        success: false,
+        error: 'New password required'
+      })
+    }
+    const saltHash = genPassword(req.body.password);
+    const salt = saltHash.salt;
+    const hash = saltHash.hash;
+    user.salt = salt;
+    user.hash = hash;
+    user.resetToken = '';
+    await user.save()
+    return res.status(200).json({
+      sucess: true,
+      message: 'Successfully changed password'
+    })
+  }
+  catch(err){
+    return res.status(400).json({
+      success: false,
+      error: `some error occured ${err}`
+    })
+  }
+  
+}
