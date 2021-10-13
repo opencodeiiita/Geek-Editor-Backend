@@ -27,4 +27,7 @@ router.delete("/profile/:id",verifyUser, deleteUser);
 router.get("/profile/:id",verifyUser,getUserById);
 router.put('/follow/:id',verifyUser, followUser);
 
+const {verifyEmail} = require("../controllers/emailController")
+
+router.get('/verifyEmail/:username/:id', verifyEmail)
 module.exports = router;
