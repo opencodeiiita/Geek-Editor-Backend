@@ -16,6 +16,7 @@ This repo is the backend of the geek editor project. It provides various APIs to
 
 1. You must have git, nodejs and mongoDB installed in your local system.
 2. Run MongoDB on PORT 27017.
+3. Make sure python is installed in your computer.
    ```sh
    mongod
    ```
@@ -26,6 +27,7 @@ This repo is the backend of the geek editor project. It provides various APIs to
 4. install dependencies and run the server
    ```sh
    npm install
+   pip install -r requirements.txt
    node app.js
    ```
    This will make the server run at `http://localhost:8000/`

@@ -11,9 +11,8 @@ exports.sendEmail = (link,email,username) => {
 
 exports.verifyEmail = async(req,res) => {
     try{
-        const id = req.params.id
+        const id = req.params.hashid
         const username = req.params.username
-        console.log(username)
         const user = await User.findOne({'username': username})
         if(!user){
             return res.status(400).json({

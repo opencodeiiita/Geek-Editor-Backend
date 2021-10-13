@@ -92,8 +92,12 @@ exports.addProfile = async (req, res, next) => {
     });
 
     const link = `http://localhost:8000/verifyEmail/${username}/${secureToken}`
+    
     /* -------Save Profile------- */
-    sendEmail(link,email,username)
+    // DO NOT DELETE IT
+    // TO BE USED AFTER DEVOLOPMENT
+    //sendEmail(link,email,username)
+    
     await newUser.save();
 
     return res.status(201).json({
@@ -123,14 +127,16 @@ exports.login = async (req, res, next) => {
           error: "All input is required"});
       }
       const user = await User.findOne({email: email});
-    if(req.originalUrl !== '/devoloperLogin/'){
-      if(!(user.verified)){
-        return res.json({
-          success: false,
-          error: "Verify your email first"
-        })
-      }
-    }
+    // DO NOT DELETE IT
+    // TO BE USED AFTER DEVOLOPMENT
+    // if(req.originalUrl !== '/devoloperLogin/'){
+    //   if(!(user.verified)){
+    //     return res.json({
+    //       success: false,
+    //       error: "Verify your email first"
+    //     })
+    //   }
+    // }
   
       if (user && (await validPassword(password,user.hash, user.salt))) {
         const token = jwt.sign(
