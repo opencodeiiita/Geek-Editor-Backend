@@ -7,7 +7,7 @@ This repo is the backend of the geek editor project. It provides various APIs to
 - [NodeJs](https://nodejs.org/en/about/)
 - [Express](https://expressjs.com/)
 - [MongoDB](https://www.mongodb.com/)
-- [Passport](http://www.passportjs.org/)
+- [JWT](https://jwt.io/introduction)
 - [Cloudinary](https://cloudinary.com/)
 
 # Getting Started
@@ -79,6 +79,9 @@ This salt and hash is stored in user database as passwords
 ## Verify Password
 
 Salt, hash, and password are passed as parameters in `verifypassword()`. A hash is generated using password and salt and is matched with the hash already present in the database. If they are same, user is authenticated.
+
+## Authentication
+When a user is logged in or registered a 256 byte token is sent to access any methods in the api the token has to be sent in the x-access-headers while sending the request
 
 ## Claim an Issue
 Comment on the issue. In case of no activity on the issue even after 2 days, the issue will be reassigned. If you have difficulty approaching the issue, feel free to ask on our slack channel.
