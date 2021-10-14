@@ -207,7 +207,7 @@ exports.deleteUser = async (req, res, next) => {
     if(user.token !== token){
       return res.status(404).json({
         success: false,
-        error: 'U cannot update other users profile'
+        error: 'U cannot delete other users profile'
       });
     }
 
