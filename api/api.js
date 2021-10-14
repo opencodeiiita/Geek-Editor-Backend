@@ -35,7 +35,17 @@ const {verifyEmail, sendEmail} = require("../controllers/emailController")
 router.get('/verifyEmail/:username/:hashid', verifyEmail)
 router.get('/reset/:hashid', function(req,res){ res.send('Password Reset page where we enter the password to be done by frontend') })
 router.post('/reset/:hashid', resetPassword)
-router.post('/sendmail', sendEmail)
+router.post('/sendmail',
+function(req,res){
+ const {link,email,username,message}  = req.body;
+ if(!(username && email && link && message)){
+   return res.status(400).json({
+     success: false,
+     error: 'All fields required'
+   })
+ }
+  sendEmail({link,email,username,message})
+  })
 //router.post('/changePassword/:username/:hashid', forgotPassword)
 
 module.exports = router;
