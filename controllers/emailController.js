@@ -65,13 +65,14 @@ exports.verifyPassword = async(req,res) => {
 
 exports.sendMailController = async(req,res) => {
     try{
-    const {link,email,username,message}  = req.body;
-    if(!(username && email && link && message)){
+    const {link,username,message}  = req.body;
+    if(!(username && link && message)){
     return res.status(400).json({
         success: false,
         error: 'All fields required'
     })
     }
+    const user = await User.findOne({'username': username})
     sendEmail({link,email,username,message})
     return res.status(400).json({
         success: true,
