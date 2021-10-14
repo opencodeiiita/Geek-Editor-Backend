@@ -10,9 +10,10 @@ const {
   deleteUser,
   getUserById,
   followUser,
-  verifyUser
+  verifyUser,
+  forgotPassword,
+  resetPassword
 } = require("../controllers/authController");
-
 /*
 ROUTES FOR API ENDPOINTS.
 */
@@ -28,8 +29,12 @@ router.post("/update/:id",verifyUser,updateUser);
 router.delete("/profile/:id",verifyUser, deleteUser);
 router.get("/profile/:id",verifyUser,getUserById);
 router.put('/follow/:id',verifyUser, followUser);
-
-const {verifyEmail} = require("../controllers/emailController")
-
+router.post('/forgotpassword',forgotPassword);
+const {verifyEmail, sendEmail, sendMailController} = require("../controllers/emailController")
 router.get('/verifyEmail/:username/:hashid', verifyEmail)
+router.get('/reset/:hashid', function(req,res){ res.send('Password Reset page where we enter the password to be done by frontend') })
+router.post('/reset/:hashid', resetPassword)
+router.post('/sendmail', sendMailController)
+//router.post('/changePassword/:username/:hashid', forgotPassword)
+
 module.exports = router;
