@@ -169,6 +169,14 @@ exports.login = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).exec();
+    
+    const token = req.headers["x-access-token"];
+    if(user.token !== token){
+      return res.status(404).json({
+        success: false,
+        error: 'U cannot update other users profile'
+      });
+    }
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -195,6 +203,14 @@ exports.updateUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
+    const token = req.headers["x-access-token"];
+    if(user.token !== token){
+      return res.status(404).json({
+        success: false,
+        error: 'U cannot update other users profile'
+      });
+    }
+
     if (!user) {
       return res.status(404).json({
         success: false,
