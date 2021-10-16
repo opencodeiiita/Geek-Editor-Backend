@@ -7,46 +7,9 @@ const validPassword = require("../utils/passwordUtils").validPassword;
 const {sendEmail} = require("./emailController")
 const {secureId} = require('../utils/emailUtils')
 const {addIp} = require("../utils/DDOS")
-
 const requestIp = require('request-ip');
  
-exports.ipMiddleware = function(req, res, next) {
-    const clientIp = requestIp.getClientIp(req); 
-    if(!addIp(clientIp)){
-      return res.status(500).json({
-        success: false,
-        message : 'Too many requests please try again'
-      })
-    }
-    next();
-};
 
-exports.verifyUser = async(req,res,next) => {
-  const token = req.headers["x-access-token"];
-  if(!token){
-    return res.status(403).json({
-      success: false,
-      error: "Token is required"
-    }) 
-  }
-  const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        error: 'User Not Found'
-      });
-    }
-    try {
-      const decoded = jwt.verify(token, "secret_key");
-      req.user = decoded;
-    } catch (err) {
-      return res.status(404).json({
-        success: false,
-        error: 'Wrong token'
-      });
-    }
-    next();
-}
 
 
 // -------GET PROFILE-------
