@@ -12,29 +12,30 @@ const {
   followUser,
   verifyUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  ipMiddleware
 } = require("../controllers/authController");
 /*
 ROUTES FOR API ENDPOINTS.
 */
 
-router.route("/profile/:username").get(getProfile);
+router.route("/profile/:username",ipMiddleware,getProfile);
 
 
-router.post("/login/", login);
+router.post("/login/",ipMiddleware, login);
 // router.post("/devoloperlogin/", login); //devolopers use this to avoid email verification
 router.route("/register/").post(addProfile);
 // router.route("/devoloperregister/").post(addProfile);
-router.post("/update/:id",verifyUser,updateUser);
-router.delete("/profile/:id",verifyUser, deleteUser);
-router.get("/profile/:id",verifyUser,getUserById);
-router.put('/follow/:id',verifyUser, followUser);
-router.post('/forgotpassword',forgotPassword);
+router.post("/update/:id",ipMiddleware,verifyUser,updateUser);
+router.delete("/profile/:id",ipMiddleware,verifyUser, deleteUser);
+router.get("/profile/:id",ipMiddleware,verifyUser,getUserById);
+router.put('/follow/:id',ipMiddleware,verifyUser, followUser);
+router.post('/forgotpassword',ipMiddleware,forgotPassword);
 const {verifyEmail, sendEmail, sendMailController} = require("../controllers/emailController")
 router.get('/verifyEmail/:username/:hashid', verifyEmail)
 router.get('/reset/:hashid', function(req,res){ res.send('Password Reset page where we enter the password to be done by frontend') })
-router.post('/reset/:hashid', resetPassword)
-router.post('/sendmail', sendMailController)
+router.post('/reset/:hashid',ipMiddleware, resetPassword)
+router.post('/sendmail',ipMiddleware, sendMailController)
 //router.post('/changePassword/:username/:hashid', forgotPassword)
 
 module.exports = router;
