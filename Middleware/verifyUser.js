@@ -25,7 +25,6 @@ exports.verifyUser = async(req,res,next) => {
         error: 'Wrong token'
       });
     }
-    console.log('A new request received for VerifyUser' + Date.now());
     next();
 }
 
