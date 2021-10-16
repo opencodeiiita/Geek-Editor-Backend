@@ -62,20 +62,20 @@ This repo is the backend of the geek editor project. It provides various APIs to
 
 | Routes | parameters | body | Description |
 | -------- | -------- | -------- | -------- |
-| 'GET' api/profile/ | username | | Retrieves the data of the logged in user |
-| 'POST' api/register/ | | email, username, password, fname, lname | Registers a user by taking name, email, username and password as input |
-| 'POST' api/login/ | | email, password | Take the email and password as input and returns the token if the credentials are valid |
-| 'POST' api/update/ | id | | Verify and update the data of the user |
-| 'DELETE' api/profile/ | id | | Verify and delete the data of the user |
-| 'GET' api/profile/ | id | | Get user by given id |
-| 'PUT' api/follow/ | id | | Follow the user with the given id |
-| 'POST' api/forgotpassword/ | | username | For changing the user password |
-| 'GET' api/verifyEmail/ | username, hashid | | For verifying the email of user by taking username and hashid as input |
-| 'GET' api/reset/ | hashid | | Get the password reset page where we enter the password |
-| 'POST' api/reset/ | hashid | password | For changing the user password by taking hashid as input |
-| 'POST' api/sendmail/ | | link,username,message| Sending mail by controller |
-| 'GET' codeapi/ | codeId | | Getting the code by taking codeId as input |
-| 'POST' codeapi/submitCode | | userId, code, language, languageCode | Adding a code by taking userId as input |
+| `GET` api/profile/ | username | | Retrieves the data of the logged in user |
+| `POST` api/register/ | | email, username, password, fname, lname | Registers a user by taking name, email, username and password as input |
+| `POST` api/login/ | | email, password | Take the email and password as input and returns the token if the credentials are valid |
+| `POST` api/update/ | id | | Verify and update the data of the user |
+| `DELETE` api/profile/ | id | | Verify and delete the data of the user |
+| `GET` api/profile/ | id | | Get user by given id |
+| `PUT` api/follow/ | id | | Follow the user with the given id |
+| `POST` api/forgotpassword/ | | username | For changing the user password |
+| `GET` api/verifyEmail/ | username, hashid | | For verifying the email of user by taking username and hashid as input |
+| `GET` api/reset/ | hashid | | Get the password reset page where we enter the password |
+| `POST` api/reset/ | hashid | password | For changing the user password by taking hashid as input |
+| `POST` api/sendmail/ | | link,username,message| Sending mail by controller |
+| `GET` codeapi/ | codeId | | Getting the code by taking codeId as input |
+| `POST` codeapi/submitCode | | userId, code, language, languageCode | Adding a code by taking userId as input |
 
 ### Get Method
 
