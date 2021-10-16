@@ -9,7 +9,7 @@ exports.addIp = (ipAdress) => {
         ipAddreses[`${ipAdress}`] = 0
     }
     ipAddreses[`${ipAdress}`] = ipAddreses[`${ipAdress}`]+1;
-    if(ipAddreses[`${ipAdress}`] > 10){
+    if(ipAddreses[`${ipAdress}`] > 100){
         return false
     }
     if(Date.now() - time > 15*60*60){
