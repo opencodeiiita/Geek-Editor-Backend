@@ -10,11 +10,15 @@ const {
   deleteUser,
   getUserById,
   followUser,
-  verifyUser,
   forgotPassword,
-  resetPassword,
-  ipMiddleware
+  resetPassword
 } = require("../controllers/authController");
+const {
+  verifyUser,
+} = require("../Middleware/verifyUser");
+const {
+  ipMiddleware
+} = require("../Middleware/ipMiddleware");
 /*
 ROUTES FOR API ENDPOINTS.
 */
