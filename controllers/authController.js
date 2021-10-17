@@ -124,7 +124,7 @@ exports.login = async (req, res, next) => {
           }
         );
           user.token = token;
-  
+          
         return res.status(200).json({
           success: true,
           data:user });
@@ -147,7 +147,7 @@ exports.updateUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id).exec();
     
-    const token = req.headers["x-access-token"];
+    const token = req.header('Authorization').replace('Bearer ','')
     if(user.token !== token){
       return res.status(404).json({
         success: false,
@@ -180,7 +180,7 @@ exports.updateUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
-    const token = req.headers["x-access-token"];
+    const token = req.header('Authorization').replace('Bearer ','')
     if(user.token !== token){
       return res.status(404).json({
         success: false,
