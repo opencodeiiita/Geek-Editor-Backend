@@ -2,7 +2,7 @@ const User = require("../models/user");
 const jwt = require("jsonwebtoken");
 
 exports.verifyUser = async(req,res,next) => {
-  const token = req.headers["x-access-token"];
+  const token = req.header('Authorization').replace('Bearer ','')
   if(!token){
     return res.status(403).json({
       success: false,
@@ -22,7 +22,8 @@ exports.verifyUser = async(req,res,next) => {
     } catch (err) {
       return res.status(404).json({
         success: false,
-        error: 'Wrong token'
+        error: 'Wrong token',
+        details:err
       });
     }
     next();
