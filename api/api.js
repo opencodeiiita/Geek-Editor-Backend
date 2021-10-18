@@ -11,7 +11,8 @@ const {
   getUserById,
   followUser,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  codesOfUser
 } = require("../controllers/authController");
 const {
   verifyUser,
@@ -23,7 +24,7 @@ const {
 ROUTES FOR API ENDPOINTS.
 */
 
-router.route("/profile/:username",ipMiddleware,getProfile);
+router.get("/profile/u/:username",ipMiddleware,getProfile);
 
 
 router.post("/login/",ipMiddleware, login);
@@ -32,7 +33,7 @@ router.route("/register/").post(addProfile);
 // router.route("/devoloperregister/").post(addProfile);
 router.post("/update/:id",ipMiddleware,verifyUser,updateUser);
 router.delete("/profile/:id",ipMiddleware,verifyUser, deleteUser);
-router.get("/profile/:id",ipMiddleware,verifyUser,getUserById);
+router.get("/profile/:id",ipMiddleware,getUserById);
 router.put('/follow/:id',ipMiddleware,verifyUser, followUser);
 router.post('/forgotpassword',ipMiddleware,forgotPassword);
 const {verifyEmail, sendEmail, sendMailController} = require("../controllers/emailController")
@@ -41,5 +42,6 @@ router.get('/reset/:hashid', function(req,res){ res.send('Password Reset page wh
 router.post('/reset/:hashid',ipMiddleware, resetPassword)
 router.post('/sendmail',ipMiddleware, sendMailController)
 //router.post('/changePassword/:username/:hashid', forgotPassword)
+router.get('/codes/:id',ipMiddleware, codesOfUser);
 
 module.exports = router;
