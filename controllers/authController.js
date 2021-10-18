@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Code = require('../models/code');
 const genPassword = require("../utils/passwordUtils").genPassword;
 const validator = require('validator');
 const { ObjectId } = require('mongodb');
@@ -143,7 +144,7 @@ exports.login = async (req, res, next) => {
 
 
 // -------UPDATE USER-------
-exports.updateUser = async (req, res, next) => {
+exports.updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec();
     
@@ -326,3 +327,38 @@ exports.resetPassword = async(req,res) => {
   }
   
 }
+
+//------get user's codes-----
+exports.codesOfUser = async (req, res) => {
+  try {
+  //find the User
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
+    }
+  //store the code Ids associated with user
+    let codeIds = user.codes;
+    //sample ids copied from database
+    // let codeIds = ["616d95892faea958ede14014","616d972d2faea958ede14015"];
+
+  //Empty array to store codes
+    const codes = [];
+    for (let c of codeIds) {
+      const rawcode = await Code.findById(c);
+      codes.push(rawcode);
+    }
+    return res.status(200).json({
+    success: true,
+    data: codes
+    })
+  }
+  catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Getting User ${req.params.id}: ${error.message}`
+    });
+  }
+};
