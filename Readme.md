@@ -75,6 +75,7 @@ This repo is the backend of the geek editor project. It provides various APIs to
 | `POST` api/reset/ | hashid | password | For changing the user password by taking hashid as input |
 | `POST` api/sendmail/ | | link,username,message| Sending mail by controller |
 | `POST` api/codes | id | | Take the user Id and returns all the codes associated with the user |
+| `GET` api/languages | id | | Take the user Id and returns all the languages associated with the user |
 | `GET` codeapi/ | codeId | | Getting the code by taking codeId as input |
 | `POST` codeapi/submitCode | | userId, code, language, languageCode | Adding a code by taking userId as input |
 

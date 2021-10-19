@@ -362,3 +362,36 @@ exports.codesOfUser = async (req, res) => {
     });
   }
 };
+
+exports.languagesOfUser = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
+    }
+    let codeIds = user.codes;
+    const languages = new Set();
+    for (let c of codeIds) {
+      const rawcode = await Code.findById(c);
+      languages.add(rawcode.language);
+    }
+    data = [];
+    languages.forEach(element => {
+      data.push(element)
+    });
+
+    return res.status(200).json({
+    success: true,
+    data: data
+    })
+  }
+  catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: `Error Getting User ${req.params.id}: ${error.message}`
+    });
+  }
+};
