@@ -25,6 +25,8 @@ const {
 ROUTES FOR API ENDPOINTS.
 */
 
+router.get('/', (req, res) => res.send('Server is working'));
+
 router.get("/profile/u/:username",ipMiddleware,getProfile);
 
 
