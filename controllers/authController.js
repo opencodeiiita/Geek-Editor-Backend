@@ -70,6 +70,7 @@ exports.addProfile = async (req, res, next) => {
     
     await newUser.save();
     const token = await newUser.generateAuthToken()
+    const refToken = await newUser.generateRefreshToken()
     return res.status(201).json({
       success: true,
       data: newUser,
@@ -110,7 +111,8 @@ exports.login = async (req, res, next) => {
   
       if (user && (await validPassword(password,user.hash, user.salt))) {
           
-          const token = await user.generateAuthToken()
+          const token = await user.generateAuthToken();
+          const refToken = await user.generateRefreshToken();
           await user.save();
 
         return res.status(200).json({
@@ -368,3 +370,27 @@ exports.languagesOfUser = async (req, res) => {
     });
   }
 };
+
+// verify refresh token 
+exports.verifyRefreshToken = async (req, res) =>  {
+  const refToken = req.body.refToken;
+    if (!refToken) res.json({sucess: false, error: 'refresh token not found'})
+    jwt.verify(refToken, 'refresh_secret_key', async (err, data) => {
+      try {
+      if (err) return res.json({success: false, error: err});
+        //find user
+        const userId = data._id;
+        const user = await User.findById(userId);
+        if (!user) return res.json({sucess: false, error: 'user not found'})
+        //generate new tokens
+        const token = await user.generateAuthToken();
+        const refToken = await user.generateRefreshToken();
+        //save and send response
+        await user.save();
+        return res.json({success: true, token: token, refToken: refToken})
+      } catch(error) {
+        console.log(error)
+        return res.json({success: false, error: error});
+      }
+    })
+}

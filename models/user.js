@@ -58,6 +58,9 @@ const UserSchema = new mongoose.Schema({
   tokens: [{
     token:{
         type:String,
+    },
+    refToken:{
+        type:String,
     }
 }],
   verified: {type: Boolean,default:false},
@@ -73,6 +76,16 @@ UserSchema.methods.generateAuthToken = async function () {
   await user.save()
 
   return token
+}
+
+UserSchema.methods.generateRefreshToken = async function () {
+  const user = this
+  const refToken = jwt.sign({_id: user._id.toString() }, "refresh_secret_key")
+
+  user.tokens = user.tokens.concat({refToken})
+  await user.save()
+
+  return refToken
 }
 
 const User = mongoose.model('User', UserSchema);
