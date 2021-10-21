@@ -51,13 +51,6 @@ exports.addProfile = async (req, res, next) => {
     if (!validator.isEmail(req.body.email)) {
       throw new Error("Email is invalid");
     }
-    const token = jwt.sign(
-      { username: req.body.username, email:req.body.email },
-       'secret_key',
-      {
-        expiresIn: "2h",
-      }
-    );
     const newUser = new User({
       username: req.body.username,
       hash: hash,
@@ -65,7 +58,6 @@ exports.addProfile = async (req, res, next) => {
       fname: req.body.fname,
       lname: req.body.lname,
       email: req.body.email,
-      token: token,
       verificationToken: secureToken
     });
 
@@ -77,7 +69,7 @@ exports.addProfile = async (req, res, next) => {
     //sendEmail(link,email,username,'Verify email')
     
     await newUser.save();
-
+    const token = await newUser.generateAuthToken()
     return res.status(201).json({
       success: true,
       data: newUser,
@@ -117,15 +109,10 @@ exports.login = async (req, res, next) => {
     // }
   
       if (user && (await validPassword(password,user.hash, user.salt))) {
-        const token = jwt.sign(
-          { user_id: user._id, email },
-          "secret_key",
-          {
-            expiresIn: "2h",
-          }
-        );
-          user.token = token;
           
+          const token = await user.generateAuthToken()
+          await user.save();
+
         return res.status(200).json({
           success: true,
           data:user });
@@ -147,14 +134,7 @@ exports.login = async (req, res, next) => {
 exports.updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).exec();
-    
-    const token = req.header('Authorization').replace('Bearer ','')
-    if(user.token !== token){
-      return res.status(404).json({
-        success: false,
-        error: 'U cannot update other users profile'
-      });
-    }
+
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -181,13 +161,6 @@ exports.updateUser = async (req, res) => {
 exports.deleteUser = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
-    const token = req.header('Authorization').replace('Bearer ','')
-    if(user.token !== token){
-      return res.status(404).json({
-        success: false,
-        error: 'U cannot delete other users profile'
-      });
-    }
 
     if (!user) {
       return res.status(404).json({

@@ -17,8 +17,14 @@ exports.verifyUser = async(req,res,next) => {
       });
     }
     try {
-      const decoded = jwt.verify(token, "secret_key");
-      req.user = decoded;
+      const decoded = jwt.verify(token, "secret_key")
+        const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
+
+        if (!user) {
+            throw new Error()
+        }
+
+        req.user =user
     } catch (err) {
       return res.status(404).json({
         success: false,
