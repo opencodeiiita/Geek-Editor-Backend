@@ -14,6 +14,7 @@ const {
   resetPassword,
   codesOfUser,
   languagesOfUser,
+  verifyRefreshToken
 } = require("../controllers/authController");
 const {
   verifyUser,
@@ -47,5 +48,6 @@ router.post('/sendmail',ipMiddleware, sendMailController)
 //router.post('/changePassword/:username/:hashid', forgotPassword)
 router.get('/codes/:id',ipMiddleware, codesOfUser);
 router.get('/languages/:id',ipMiddleware, languagesOfUser);
+router.post('/refresh-token', verifyRefreshToken)
 
 module.exports = router;
