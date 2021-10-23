@@ -88,6 +88,7 @@ This repo is the backend of the geek editor project. It provides various APIs to
 
 - Register `("/register")` : Registers the user and adds the data to mongoDB.
 - Login `("/login")` : logins the user after verifying username and password.
+- Refresh Token `("/refresh-token")` : Refresh the session of user by verifying the refresh token send by client and generating new sets of tokens.
 
 ## Generation of Salt and Hash
 
