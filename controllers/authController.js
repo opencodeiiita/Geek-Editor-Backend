@@ -132,6 +132,21 @@ exports.login = async (req, res, next) => {
 };
 
 
+// -------LOGOUT USER-------
+exports.logoutUser =  async (req,res) => {
+  try {
+      req.user.tokens = req.user.tokens.filter((token) => {
+      return token.token !== req.token
+      })
+      await req.user.save()
+
+      res.send()
+  } catch (e) {
+      res.status(500).send()
+  }
+};
+
+
 // -------UPDATE USER-------
 exports.updateUser = async (req, res) => {
   try {

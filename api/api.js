@@ -6,6 +6,7 @@ const {
   getProfile,
   addProfile,
   login,
+  logoutUser,
   updateUser,
   deleteUser,
   getUserById,
@@ -35,6 +36,7 @@ router.post("/login/",ipMiddleware, login);
 // router.post("/devoloperlogin/", login); //devolopers use this to avoid email verification
 router.route("/register/").post(addProfile);
 // router.route("/devoloperregister/").post(addProfile);
+router.post("/logout",verifyUser,logoutUser);
 router.post("/update/:id",ipMiddleware,verifyUser,updateUser);
 router.delete("/profile/:id",ipMiddleware,verifyUser, deleteUser);
 router.get("/profile/:id",ipMiddleware,getUserById);
