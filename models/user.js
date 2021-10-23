@@ -70,7 +70,7 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.methods.generateAuthToken = async function () {
   const user = this
-  const token = jwt.sign({_id: user._id.toString() }, "secret_key")
+  const token = jwt.sign({_id: user._id.toString() }, "secret_key", {expiresIn: '2h'})
 
   user.tokens = user.tokens.concat({token})
   await user.save()
@@ -80,7 +80,7 @@ UserSchema.methods.generateAuthToken = async function () {
 
 UserSchema.methods.generateRefreshToken = async function () {
   const user = this
-  const refToken = jwt.sign({_id: user._id.toString() }, "refresh_secret_key")
+  const refToken = jwt.sign({_id: user._id.toString() }, "refresh_secret_key", {expiresIn: '10d'})
 
   user.tokens = user.tokens.concat({refToken})
   await user.save()

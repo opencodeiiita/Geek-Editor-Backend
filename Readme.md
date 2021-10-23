@@ -88,7 +88,14 @@ This repo is the backend of the geek editor project. It provides various APIs to
 
 - Register `("/register")` : Registers the user and adds the data to mongoDB.
 - Login `("/login")` : logins the user after verifying username and password.
-- Refresh Token `("/refresh-token")` : Refresh the session of user by verifying the refresh token send by client and generating new sets of tokens.
+
+## Access Tokens
+For each login, a user session is created using an access token. The access token is a JWT (JSON Web Token) with a expiration time of 2 hours. For each request to a protected route, the client-side sends an access token to verify the user identity.
+## Refresh Tokens
+The access tokens send to the client has an expiration of 2 hours. That means any request made by the client 2 hours after the login, will fail and user will need to re-verify his/her identity by loging in again. To prevent this we use a refresh token which is used when the access token expires.
+- Refresh Token `("/refresh-token")` : Refresh the session of user by verifying the refresh token send by client and generating new sets of access and refresh tokens, and thus preventing user to loging again
+
+> Note: The refresh token is also bounded by an expiration time of 10 days. This is comparatively very large with respect to the expiration time of the access token. If both the access and refresh tokens are expired, the user must login again.  
 
 ## Generation of Salt and Hash
 
