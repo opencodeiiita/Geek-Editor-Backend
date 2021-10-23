@@ -9,22 +9,28 @@ exports.verifyUser = async(req,res,next) => {
       error: "Token is required"
     })
   }
-  const user = await User.findById(req.params.id);
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        error: 'User Not Found'
-      });
-    }
+    
     try {
       const decoded = jwt.verify(token, "secret_key")
+        const user_check = await User.findOne({_id:decoded._id})
         const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
 
-        if (!user) {
-            throw new Error()
+        if (!user_check) {
+          return res.status(404).json({
+            success: false,
+            error: 'User Not Found'
+          });
+        }
+
+        if(!user) {
+          return res.status(404).json({
+            success: false,
+            error: 'Please authenticate'
+          });
         }
 
         req.user =user
+        req.token = token
     } catch (err) {
       return res.status(404).json({
         success: false,
