@@ -1,9 +1,9 @@
 const Code = require('../models/code');
 const User = require('../models/user')
 exports.getCode = async (req, res) => {
-    const codeId = req.params.id;
+    var codeId = req.params.codeId;
     try {
-        const code = await Code.find({codeId});
+        const code = await Code.findById(codeId);
 
         return res.status(200).json({
             success: true,
