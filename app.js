@@ -61,7 +61,7 @@ app.use(
 
 
 // ROUTES
-app.use("/", require("./api/api.js"));
+app.use("/user", require('./routes/userRouter.js'));
 app.use("/code", require("./api/codeapi.js"));
 
 const PORT = process.env.PORT || 8000;
