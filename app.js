@@ -61,7 +61,8 @@ app.use(
 
 
 // ROUTES
-app.use("/user", require('./routes/userRouter.js'));
+app.get('/', (req, res) => res.send('server is working'));
+app.use("/user", require('./api/userRouter.js'));
 app.use("/code", require("./api/codeapi.js"));
 
 const PORT = process.env.PORT || 8000;
