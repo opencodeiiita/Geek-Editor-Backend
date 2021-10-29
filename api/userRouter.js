@@ -1,36 +1,20 @@
 const express = require("express");
-const passport = require("passport");
+const { login, 
+    addProfile, 
+    logoutUser, 
+    deleteUser, 
+    updateUser, 
+    followUser, 
+    getUserById, 
+    forgotPassword, 
+    resetPassword, 
+    codesOfUser, 
+    languagesOfUser, 
+    verifyRefreshToken } = require("../controllers/authController");
 const router = express.Router();
-
-const {
-  getProfile,
-  addProfile,
-  login,
-  logoutUser,
-  updateUser,
-  deleteUser,
-  getUserById,
-  followUser,
-  forgotPassword,
-  resetPassword,
-  codesOfUser,
-  languagesOfUser,
-  verifyRefreshToken
-} = require("../controllers/authController");
-const {
-  verifyUser,
-} = require("../Middleware/verifyUser");
-const {
-  ipMiddleware
-} = require("../Middleware/ipMiddleware");
-/*
-ROUTES FOR API ENDPOINTS.
-*/
-
-router.get('/', (req, res) => res.send('Server is working'));
-
-router.get("/profile/u/:username",ipMiddleware,getProfile);
-
+const {verifyEmail, sendEmail, sendMailController} = require("../controllers/emailController");
+const { ipMiddleware } = require("../Middleware/ipMiddleware");
+const { verifyUser } = require("../Middleware/verifyUser");
 
 router.post("/login/",ipMiddleware, login);
 // router.post("/devoloperlogin/", login); //devolopers use this to avoid email verification
@@ -42,7 +26,6 @@ router.delete("/profile/:id",ipMiddleware,verifyUser, deleteUser);
 router.get("/profile/:id",ipMiddleware,getUserById);
 router.put('/follow/:id',ipMiddleware,verifyUser, followUser);
 router.post('/forgotpassword',ipMiddleware,forgotPassword);
-const {verifyEmail, sendEmail, sendMailController} = require("../controllers/emailController")
 router.get('/verifyEmail/:username/:hashid', verifyEmail)
 router.get('/reset/:hashid', function(req,res){ res.send('Password Reset page where we enter the password to be done by frontend') })
 router.post('/reset/:hashid',ipMiddleware, resetPassword)
