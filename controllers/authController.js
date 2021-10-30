@@ -93,7 +93,7 @@ exports.login = async (req, res, next) => {
       const { email, password } = req.body;
       
       if (!(email && password)) {
-        res.status(400).json({
+        return res.status(400).json({
           success: false,
           error: "All input is required"});
       }
@@ -408,4 +408,48 @@ exports.verifyRefreshToken = async (req, res) =>  {
         return res.json({success: false, error: error});
       }
     })
+}
+
+// verify auth token
+exports.verifyAuthToken = async (req, res) => {
+  if (!req.header('Authorization')) {
+    return res.status(400).json({
+      success:false,
+      error:'authorization header not found'
+    })
+  }
+  const token = req.header('Authorization').replace('Bearer ','')
+  if(!token){
+    return res.status(403).json({
+      success: false,
+      error: "Token is required"
+    })
+  }
+  try {
+    const decoded = jwt.verify(token, "secret_key")
+    const user_check = await User.findOne({_id:decoded._id})
+    const user = await User.findOne({ _id: decoded._id, 'tokens.token': token })
+    if (!user_check) {
+      return res.status(404).json({
+        success: false,
+        error: 'User Not Found'
+      });
+    }
+    if(!user) {
+      return res.status(404).json({
+        success: false,
+        error: 'Please authenticate'
+      });
+    }
+    return res.status(200).json({
+      success: true, 
+      data: user
+    })
+  } catch (err) {
+    return res.status(404).json({
+      success: false,
+      error: 'Wrong token',
+      details:err
+    });
+  }
 }
