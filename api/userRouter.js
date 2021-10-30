@@ -10,7 +10,8 @@ const { login,
     resetPassword, 
     codesOfUser, 
     languagesOfUser, 
-    verifyRefreshToken } = require("../controllers/authController");
+    verifyRefreshToken, 
+    verifyAuthToken} = require("../controllers/authController");
 const router = express.Router();
 const {verifyEmail, sendEmail, sendMailController} = require("../controllers/emailController");
 const { ipMiddleware } = require("../Middleware/ipMiddleware");
@@ -34,5 +35,6 @@ router.post('/sendmail',ipMiddleware, sendMailController)
 router.get('/codes/:id',ipMiddleware, codesOfUser);
 router.get('/languages/:id',ipMiddleware, languagesOfUser);
 router.post('/refresh-token', verifyRefreshToken)
+router.post('/verify-auth-token', verifyAuthToken)
 
 module.exports = router;

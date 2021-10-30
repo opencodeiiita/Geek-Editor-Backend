@@ -5,6 +5,7 @@ const passport = require("passport");
 const session = require("express-session");
 const path = require("path");
 const app = express();
+const cors = require('cors')
 
 
 // SET UP THE ASSETS FOLDER
@@ -37,6 +38,7 @@ if (db) {
 // EXPRESS BODY PARSER
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors())
 
 
 // EXPRESS SESSION
