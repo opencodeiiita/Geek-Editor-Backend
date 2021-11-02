@@ -63,6 +63,7 @@ const UserSchema = new mongoose.Schema({
         type:String,
     }
 }],
+  image: {type: String , default: ""},
   verified: {type: Boolean,default:false},
   verificationToken: {type: String,default: ''},
   resetToken: {type: String, default: ''}

@@ -14,6 +14,7 @@ const { login,
     verifyAuthToken} = require("../controllers/authController");
 const router = express.Router();
 const {verifyEmail, sendEmail, sendMailController} = require("../controllers/emailController");
+const { getImage, updateImage } = require("../controllers/imageControllers");
 const { ipMiddleware } = require("../Middleware/ipMiddleware");
 const { verifyUser } = require("../Middleware/verifyUser");
 
@@ -36,5 +37,6 @@ router.get('/codes/:id',ipMiddleware, codesOfUser);
 router.get('/languages/:id',ipMiddleware, languagesOfUser);
 router.post('/refresh-token', verifyRefreshToken)
 router.post('/verify-auth-token', verifyAuthToken)
-
+router.post('/image', getImage)
+router.put('/image', updateImage)
 module.exports = router;
