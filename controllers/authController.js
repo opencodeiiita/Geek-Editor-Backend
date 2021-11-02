@@ -124,6 +124,7 @@ exports.login = async (req, res, next) => {
         error: `Invalid credentials`,
       });
     } catch (err) {
+      console.log(err)
         return res.status(500).json({
         success: false,
         error: `Error loging in : ${err.message}`,
